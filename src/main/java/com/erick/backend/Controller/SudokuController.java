@@ -1,11 +1,12 @@
 package com.erick.backend.Controller;
 
+import org.json.*;
+import com.erick.backend.Entity.Table;
 import com.erick.backend.Service.SudokuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/sudoku")
@@ -20,27 +21,37 @@ public class SudokuController {
         return sudokuService.getBoard();
     }
 
-//    public Collection<Student> getAllStudents(){
-//        return studentService.getAllStudents();
-//    }
-//
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    public Student getStudentById(@PathVariable("id") int id) {
-//        return studentService.getStudentById(id);
-//    }
-//
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    public void deleteStudentById(@PathVariable("id") int id) {
-//        studentService.deleteStudentById(id);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public void updateStudent(@RequestBody Student student){
-//        studentService.updateStudent(student);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public void addStudent(@RequestBody Student student) {
-//        studentService.addStudent(student);
-//    }
+
+
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "http://localhost:3000")
+    public char [][] solveBoard(@RequestBody String json) {
+
+        char [][] board = new char [9][9];
+
+        JSONObject obj = new JSONObject(json);
+        JSONArray arr = (JSONArray) obj.get("array");
+
+        char [] str = arr.toString().toCharArray();
+        char [] temp = new char [81];
+
+        for (int i = 0, j = 0; i < str.length; i++)
+        {
+            if (str[i] == '.')
+                temp[j++] = '.';
+
+            else if (Character.isDigit(str[i]))
+                temp[j++] = str[i];
+        }
+
+        int index = 0;
+
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+                board[i][j] = temp[index++];
+
+        sudokuService.solver(board);
+
+        return board;
+    }
 }

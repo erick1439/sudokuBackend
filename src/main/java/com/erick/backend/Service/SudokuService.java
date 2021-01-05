@@ -24,11 +24,6 @@ public class SudokuService {
         System.out.println(response);
 
         return parser(response);
-
-//        solver(array);
-//        System.out.println();
-//
-//        printBoard(array);
     }
 
     public String sendGet(String urlString)
@@ -82,19 +77,6 @@ public class SudokuService {
         }
 
         return array;
-    }
-
-    public static void printBoard(char [][] board)
-    {
-        for (int i = 0; i < board.length; i++)
-        {
-            for (int j = 0; j < board.length; j++)
-                System.out.print(board[i][j] + " ");
-
-            System.out.println();
-        }
-
-        System.out.println();
     }
 
     public static boolean isValid(char[][] board, int row, int col, char c)

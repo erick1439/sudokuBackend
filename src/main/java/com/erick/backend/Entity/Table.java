@@ -17,5 +17,11 @@ public class Table {
         this.table = table;
     }
 
+    public String toString()
+    {
+        return "this is a test: " + this.table[0][0];
+    }
+
+
 }
 
