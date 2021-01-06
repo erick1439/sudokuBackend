@@ -22,6 +22,5 @@ public class Table {
         return "this is a test: " + this.table[0][0];
     }
 
-
 }
 

@@ -97,6 +97,48 @@ public class SudokuService {
         return true;
     }
 
+    public static boolean checkBoard(char [][] board)
+    {
+        boolean [][] boxes = new boolean [9][9];
+
+        for (int i = 0; i < 9; i++)
+        {
+            boolean [] row = new boolean [9];
+            boolean [] col = new boolean [9];
+
+            for (int j = 0; j < 9; j++)
+            {
+                if (board[i][j] == '.');
+
+                else if (row[(board[i][j] - '0') - 1] == false)
+                    row[(board[i][j] - '0') - 1] = true;
+
+                else
+                    return false;
+
+                if (board[j][i] == '.');
+
+                else if (col[(board[j][i] - '0') - 1] == false)
+                    col[(board[j][i] - '0') - 1] = true;
+
+                else
+                    return false;
+
+                int box = (i / 3) * 3 + (j / 3);
+
+                if (board[i][j] == '.');
+
+                else if (boxes[box][(board[i][j] - '0') - 1] == false)
+                    boxes[box][(board[i][j] - '0' - 1)] = true;
+
+                else
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean solver(char [][] board)
     {
         for (int i = 0; i < board.length; i++)

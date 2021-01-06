@@ -1,7 +1,6 @@
 package com.erick.backend.Controller;
 
 import org.json.*;
-import com.erick.backend.Entity.Table;
 import com.erick.backend.Service.SudokuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -53,5 +52,48 @@ public class SudokuController {
         sudokuService.solver(board);
 
         return board;
+    }
+
+    @RequestMapping(path="/checkBoard", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "http://localhost:3000")
+    public int checkBoard(@RequestBody String json) {
+
+        char [][] board = new char [9][9];
+
+        JSONObject obj = new JSONObject(json);
+        JSONArray arr = (JSONArray) obj.get("array");
+
+        char [] str = arr.toString().toCharArray();
+        char [] temp = new char [81];
+
+        int counter = 0;
+
+        for (int i = 0, j = 0; i < str.length; i++)
+        {
+            if (str[i] == '.') {
+                temp[j++] = '.';
+                counter++;
+            }
+
+            else if (Character.isDigit(str[i]))
+                temp[j++] = str[i];
+        }
+
+        if (counter != 0)
+            return 2;
+
+        int index = 0;
+
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+                board[i][j] = temp[index++];
+
+        boolean solved = sudokuService.checkBoard(board);
+
+        if (solved)
+            return 0;
+
+        else
+            return 1;
     }
 }
