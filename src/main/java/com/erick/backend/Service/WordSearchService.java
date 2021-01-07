@@ -1,14 +1,17 @@
 package com.erick.backend.Service;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
+import java.io.File;
+import java.util.*;
 
 @RestController
 public class WordSearchService {
     private char [][] matrix;
     private char [][] matrixAux;
-    private String [] words = { "pez", "oso","ave","boa","lobo","gato"};
+    private String [] words;
     private char [] abc = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','w','y','z'};
     private Random r = new Random();
     private int row,col, size, cont, cont2;
@@ -17,6 +20,7 @@ public class WordSearchService {
     public WordSearchService()  //creates a matrix of order size*size
     {
         this.size = 15;
+        this.words = generateList();
         this.matrix = new char [this.size][this.size];
         this.matrixAux = new char [this.size][this.size];
         this.cleanMatrix(this.matrix);
@@ -24,6 +28,55 @@ public class WordSearchService {
         this.randomABC(this.matrix);
     }
 
+    public String [] generateList()
+    {
+        int index = 0;
+        String [] words = new String [7];
+        HashMap<Integer, String> map = new HashMap<>();
+        HashSet<Integer> set = new HashSet<>();
+
+        try {
+
+            Resource resource = new ClassPathResource("/static/words.txt");
+            Scanner input = new Scanner(new File(resource.getURL().getPath()));
+
+            while (input.hasNext())
+            {
+                map.put(index, input.next());
+                index++;
+            }
+
+            for (int i = 0; i < words.length; i++) {
+                words[i] = map.get(this.r.nextInt(349));
+            }
+
+
+        } catch(Exception e) {
+
+            System.out.println("file not found");
+
+            words[0] = "cat";
+            words[1] = "bear";
+            words[2] = "bird";
+            words[3] = "snake";
+            words[4] = "wolf";
+            words[5] = "dog";
+            words[6] = "shark";
+
+        }
+
+        return words;
+    }
+
+    public void setList(String [] words)
+    {
+        this.words = words;
+    }
+
+    public String [] getList()
+    {
+        return this.words;
+    }
 
     public void cleanMatrix (char [][] matrixToClean)
     {
@@ -32,7 +85,6 @@ public class WordSearchService {
                 matrixToClean[i][j] = '0';
 
     }
-
 
     public void cleanVector(char [] vector)
     {
