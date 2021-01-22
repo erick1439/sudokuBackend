@@ -4,6 +4,8 @@ import com.erick.backend.Service.WordSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 
 @RestController
 @RequestMapping("/word-search")
@@ -27,7 +29,6 @@ public class WordSearchController {
 
     }
 
-
     @RequestMapping(path="/getList", method = RequestMethod.GET)
     @CrossOrigin(origins = "http://localhost:3000")
     public String [] getList() {
@@ -35,6 +36,14 @@ public class WordSearchController {
         this.list = wordSearchService.generateList();
 
         return this.list; }
+
+
+    @RequestMapping(path="/solveWordSearch", method = RequestMethod.GET)
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ArrayList<ArrayList<ArrayList<Integer>>> solveWordSearch() {
+
+        return wordSearchService.solveWordSearch();
+    }
 
 }
 
